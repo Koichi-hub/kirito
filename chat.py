@@ -14,7 +14,8 @@ vk._auth_token()
 
 vk.get_api()
 
-longpoll = VkBotLongPoll(vk, group_id=192768603)
+group_lol = os.environ.get('group_id_id')
+longpoll = VkBotLongPoll(vk, group_id=group_lol)
 
 print('Bot start')
 
