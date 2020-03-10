@@ -55,9 +55,11 @@ while True:
         for event in longpoll.listen():
             if event.type == VkBotEventType.MESSAGE_NEW and event.object.peer_id != event.object.from_id:
 
-                if len(event.obj.text) > 50:
-                    write_msg(event.obj.peer_id, 'уменьши сообщение)')
-                    break
+                if event.obj.text.lower() == '.команды':
+                    write_msg(event.obj.peer_id, '.время, .яинфа, .нас, .будущее, .вики, .статус')
+                    
+                if event.obj.text == '.мне' and event.obj.from_id == 379076419:
+                    write_msg(event.obj.peer_id, '.чат, .инфа, .мы, .добавить')
 
                 if event.object.text.lower() == '.время':
                     write_msg(event.object.peer_id, 'сегодня ' + str(datetime.date.today()) + ' сейчас ' +
