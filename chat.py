@@ -161,12 +161,16 @@ while True:
                     else:
                         pass
 
-                if event.obj.text == '.добавить':
-                    if event.obj.from_id == 379076419:
-                        for event in longpoll.listen():
-                            if event.type == VkBotEventType.MESSAGE_NEW and event.object.peer_id != event.object.from_id:
+                if event.obj.text == '.добавить' and event.obj.from_id == 379076419:
+                    write_msg(event.obj.peer_id, 'id, name, status, score')
+                    for event in longpoll.listen():
+                        if event.type == VkBotEventType.MESSAGE_NEW and event.object.peer_id != event.object.from_id:
+                            if event.obj.from_id == 379076419:
                                 new = event.obj.text.split()
                                 insert_user(event.obj.peer_id, int(new[0]), new[1], new[2], int(new[3]))
+                                break
+                            else:
+                                write_msg(event.obj.peer_id, 'в другой раз)')
                     else:
                         write_msg(event.obj.peer_id, 'извини, тебе так нельзя)')
 
