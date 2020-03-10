@@ -61,7 +61,8 @@ while True:
                     write_msg(event.object.peer_id, 'количество участников ' + str(members['count']))
 
                 if event.object.text.lower() == '.чат':
-                    if event.obj.from_id == 379076419:
+                    id_lol = os.environ.get('id_id')
+                    if event.obj.from_id == id_lol:
                         info_chat = vk.method('messages.getConversationMembers', {'peer_id': event.obj.peer_id})[
                             'profiles']
                         key_key = ['id', 'first_name', 'last_name', 'sex', 'screen_name']
@@ -73,7 +74,7 @@ while True:
                         a = ''
                         for i in info_user:
                             a += '{0}\n'.format(i)
-                        vk.method('messages.send', {'user_id': 379076419,
+                        vk.method('messages.send', {'user_id': id_lol,
                                                     'message': 'информация о участниках:\n' + a, 'random_id': 0})
                     else:
                         write_msg(event.obj.peer_id, 'у тебя нет доступа')
@@ -106,6 +107,29 @@ while True:
                             except wikipedia.exceptions.DisambiguationError:
                                 write_msg(event.obj.peer_id, 'запрос не выполнен')
                                 break
+                                
+                if event.obj.text == '.инфа':
+                    write_msg(event.obj.peer_id, 'id:')
+                    for event in longpoll.listen():
+                        if event.type == VkBotEventType.MESSAGE_NEW and event.object.peer_id != event.object.from_id:
+                            id_lol = os.environ.get('id_id')
+                            if event.obj.from_id == id_lol:
+                                info = vk.method('users.get', {'user_ids': int(event.obj.text), 'fields': 'sex'})[0]
+                                info_1 = ''
+                                for key, value in info.items():
+                                    if key == 'sex':
+                                        if value == 1:
+                                            value = 'женский'
+                                        if value == 2:
+                                            value = 'мужской'
+                                        else:
+                                            value = 'не указан'
+                                        info_1 += '{0}:{1}\n'.format(key, value)
+                                    else:
+                                        info_1 += '{0}:{1}\n'.format(key, value)
+                                write_msg(event.object.peer_id, 'информация\n' + info_1)
+                            else:
+                                break 
 
     except Exception as E:
         print(Exception)
