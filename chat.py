@@ -5,7 +5,11 @@ import datetime
 import random
 import wikipedia
 import os
+import sqlite3
 wikipedia.set_lang("RU")
+
+conn = sqlite3.connect('from_us.db')
+cursor = conn.cursor()
 
 token_lol = os.environ.get('token_bot_bot')
 vk = vk_api.VkApi(token=str(token_lol))
@@ -25,6 +29,25 @@ act = ['все останеться как есть', 'жизнь изменит
 
 def write_msg(peer_id, message):
     vk.method('messages.send', {'peer_id': peer_id, 'message': message, 'random_id': get_random_id()})
+
+
+def insert_user(peer_id, id, name, status='student', score=0):
+    cursor.execute("INSERT INTO math_1 VALUES (?, ?, ?, ?)", [id, name, status, score])
+    conn.commit()
+    write_msg(peer_id, 'успешно)')
+   
+
+def info_user(peer_id, id):
+    info_st = [i for i in cursor.execute("select name, status, score from math_1 where id = (?)", [id])][0]
+    status = ''
+    for i in info_st:
+        status += str(i) + '\n'
+    write_msg(peer_id, status)
+    
+    
+def info_users():
+    they = cursor.execute("select * from math_1")
+    write_msg(379076419, str(they))
 
 
 while True:
@@ -128,6 +151,24 @@ while True:
                                 write_msg(event.object.peer_id, 'информация\n' + info_1)
                             else:
                                 break 
+                               
+                if event.obj.text == '.статус':
+                    info_user(event.obj.peer_id, event.obj.from_id)
+
+                if event.obj.text == '.мы':
+                    if event.obj.from_id == 379076419:
+                        info_users()
+                    else:
+                        pass
+
+                if event.obj.text == '.добавить':
+                    if event.obj.from_id == 379076419:
+                        for event in longpoll.listen():
+                            if event.type == VkBotEventType.MESSAGE_NEW and event.object.peer_id != event.object.from_id:
+                                new = event.obj.text.split()
+                                insert_user(event.obj.peer_id, int(new[0]), new[1], new[2], int(new[3]))
+                    else:
+                        write_msg(event.obj.peer_id, 'извини, тебе так нельзя)')
 
     except Exception as E:
         print(Exception)
