@@ -10,8 +10,6 @@ wikipedia.set_lang("RU")
 token_lol = os.environ.get('token_bot_bot')
 vk = vk_api.VkApi(token=str(token_lol))
 
-id_lol = os.environ.get('id_id')
-
 vk._auth_token()
 
 vk.get_api()
@@ -63,7 +61,7 @@ while True:
                     write_msg(event.object.peer_id, 'количество участников ' + str(members['count']))
 
                 if event.object.text.lower() == '.чат':
-                    if event.obj.from_id == id_lol:
+                    if event.obj.from_id == 379076419:
                         info_chat = vk.method('messages.getConversationMembers', {'peer_id': event.obj.peer_id})[
                             'profiles']
                         key_key = ['id', 'first_name', 'last_name', 'sex', 'screen_name']
@@ -75,7 +73,7 @@ while True:
                         a = ''
                         for i in info_user:
                             a += '{0}\n'.format(i)
-                        vk.method('messages.send', {'user_id': id_lol,
+                        vk.method('messages.send', {'user_id': 379076419,
                                                     'message': 'информация о участниках:\n' + a, 'random_id': 0})
                     else:
                         write_msg(event.obj.peer_id, 'у тебя нет доступа')
@@ -113,7 +111,7 @@ while True:
                     write_msg(event.obj.peer_id, 'id:')
                     for event in longpoll.listen():
                         if event.type == VkBotEventType.MESSAGE_NEW and event.object.peer_id != event.object.from_id:
-                            if event.obj.from_id == id_lol:
+                            if event.obj.from_id == 379076419:
                                 info = vk.method('users.get', {'user_ids': int(event.obj.text), 'fields': 'sex'})[0]
                                 info_1 = ''
                                 for key, value in info.items():
