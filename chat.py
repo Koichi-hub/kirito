@@ -8,7 +8,8 @@ import os
 import sqlite3
 wikipedia.set_lang("RU")
 
-conn = sqlite3.connect('from_us.db')
+value_e = os.environ['DATABASE_URL']
+conn = sqlite3.connect(value_e)
 cursor = conn.cursor()
 
 token_lol = os.environ.get('token_bot_bot')
