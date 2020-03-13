@@ -42,10 +42,7 @@ while True:
                     write_msg(event.obj.peer_id, f'В городе {b[0]}, {b[1]}, время - {b[5]}, сейчас - {b[2]}, температура - {b[3]}, скорость ветра - {b[4]}')
 
                 if event.obj.text.lower() == '.команды':
-                    write_msg(event.obj.peer_id, '.время, .яинфа, .нас, .будущее, .вики, .статус')
-                    
-                if event.obj.text == '.мне' and event.obj.from_id == 379076419:
-                    write_msg(event.obj.peer_id, '.чат, .инфа, .мы, .добавить')
+                    write_msg(event.obj.peer_id, '.время, .погода .яинфа, .нас, .будущее, .вики, .чат, .инфа')
 
                 if event.object.text.lower() == '.время':
                     write_msg(event.object.peer_id, 'сегодня ' + str(datetime.date.today()) + ' сейчас ' +
