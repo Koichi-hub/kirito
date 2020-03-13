@@ -4,6 +4,7 @@ from vk_api.utils import get_random_id
 import datetime
 import random
 import wikipedia
+import googletrans
 import os
 import requests
 wikipedia.set_lang("RU")
@@ -26,12 +27,22 @@ act = ['все останеться как есть', 'жизнь изменит
 
 def write_msg(peer_id, message):
     vk.method('messages.send', {'peer_id': peer_id, 'message': message, 'random_id': get_random_id()})
+    
+    
+def per(peer_id, message):
+    write_msg(peer_id, googletrans.Translator().translate(message, dest='ru').text)
 
 
 while True:
     try:
         for event in longpoll.listen():
             if event.type == VkBotEventType.MESSAGE_NEW and event.object.peer_id != event.object.from_id:
+                
+                if event.obj.text == '.перевод':
+                    write_msg(event.obj.peer_id, 'Введите текст)')
+                    for event in longpoll.listen():
+                        if event.type == VkBotEventType.MESSAGE_NEW and event.object.peer_id != event.object.from_id:
+                            per(event.obj.peer_id, event.obj.text)
                 
                 if event.obj.text == '.погода':
                     pog = os.environ.get('pog')
