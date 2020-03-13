@@ -43,6 +43,7 @@ while True:
                     for event in longpoll.listen():
                         if event.type == VkBotEventType.MESSAGE_NEW and event.object.peer_id != event.object.from_id:
                             per(event.obj.peer_id, event.obj.text)
+                            break
                 
                 if event.obj.text == '.погода':
                     pog = os.environ.get('pog')
