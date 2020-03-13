@@ -5,6 +5,7 @@ import datetime
 import random
 import wikipedia
 import os
+import requests
 wikipedia.set_lang("RU")
 
 token_lol = os.environ.get('token_bot_bot')
@@ -31,6 +32,14 @@ while True:
     try:
         for event in longpoll.listen():
             if event.type == VkBotEventType.MESSAGE_NEW and event.object.peer_id != event.object.from_id:
+                
+                if event.obj.text == '.погода':
+                    pog = os.environ.get('pog')
+                    response = requests.get(str(pog))
+                    response = response.json()
+                    b = [response['name'], response['sys']['country'], response['weather'][0]['main'], int(response['main']['temp'])-273, response['wind']['speed'], datetime.datetime.today().strftime("%H:%M:%S")]
+
+                    write_msg(event.obj.peer_id, f'В городе {b[0]}, {b[1]}, время - {b[5]}, сейчас - {b[2]}, температура - {b[3]}, скорость ветра - {b[4]}')
 
                 if event.obj.text.lower() == '.команды':
                     write_msg(event.obj.peer_id, '.время, .яинфа, .нас, .будущее, .вики, .статус')
