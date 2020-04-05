@@ -38,17 +38,17 @@ def covid(peer_id, message):
         b = [loc['country'], loc['country_population'], [loc['latest'][key] for key in loc['latest']]]
         country = f'страна {b[0]}, с населением {b[1]} человек\nзаражено - {b[2][0]}\nумерло - {b[2][1]}'
         write_msg(peer_id, country)
-    if country == 'италия':
+    elif country == 'италия':
         loc = covid19.getLocationByCountryCode('IT')[0]
         b = [loc['country'], loc['country_population'], [loc['latest'][key] for key in loc['latest']]]
         country = f'страна {b[0]}, с населением {b[1]} человек\nзаражено - {b[2][0]}\nумерло - {b[2][1]}'
         write_msg(peer_id, country)
-    if country == 'китай':
+    elif country == 'китай':
         loc = covid19.getLocationByCountryCode('CN')[0]
         b = [loc['country'], loc['country_population'], [loc['latest'][key] for key in loc['latest']]]
         country = f'страна {b[0]}, с населением {b[1]} человек\nзаражено - {b[2][0]}\nумерло - {b[2][1]}'
         write_msg(peer_id, country)
-    if country == 'россия':
+    elif country == 'россия':
         loc = covid19.getLocationByCountryCode('RU')[0]
         b = [loc['country'], loc['country_population'], [loc['latest'][key] for key in loc['latest']]]
         country = f'страна {b[0]}, с населением {b[1]} человек\nзаражено - {b[2][0]}\nумерло - {b[2][1]}'
