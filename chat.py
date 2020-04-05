@@ -70,6 +70,7 @@ while True:
                     write_msg(event.obj.peer_id, 'Введите страну:')
                     for event in longpoll.listen():
                         covid(event.obj.peer_id, event.obj.text)
+                        break
 
                 if event.obj.text == '.перевод':
                     write_msg(event.obj.peer_id, 'Введите текст)')
