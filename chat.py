@@ -43,11 +43,6 @@ def covid(peer_id, message):
         b = [loc['country'], loc['country_population'], [loc['latest'][key] for key in loc['latest']]]
         country = f'страна {b[0]}, с населением {b[1]} человек\nзаражено - {b[2][0]}\nумерло - {b[2][1]}'
         write_msg(peer_id, country)
-    elif country == 'китай':
-        loc = covid19.getLocationByCountryCode('CN')[0]
-        b = [loc['country'], loc['country_population'], [loc['latest'][key] for key in loc['latest']]]
-        country = f'страна {b[0]}, с населением {b[1]} человек\nзаражено - {b[2][0]}\nумерло - {b[2][1]}'
-        write_msg(peer_id, country)
     elif country == 'россия':
         loc = covid19.getLocationByCountryCode('RU')[0]
         b = [loc['country'], loc['country_population'], [loc['latest'][key] for key in loc['latest']]]
@@ -66,7 +61,7 @@ while True:
             if event.type == VkBotEventType.MESSAGE_NEW and event.object.peer_id != event.object.from_id:
 
                 if event.obj.text == '.covid19':
-                    write_msg(event.obj.peer_id, 'Вам доступны США, Италия, Китай, Россия')
+                    write_msg(event.obj.peer_id, 'Вам доступны США, Италия, Россия')
                     write_msg(event.obj.peer_id, 'Введите страну:')
                     for event in longpoll.listen():
                         covid(event.obj.peer_id, event.obj.text)
@@ -91,7 +86,7 @@ while True:
 
                 if event.obj.text.lower() == '.команды':
                     write_msg(event.obj.peer_id,
-                              '.погода, .перевод, .вики, .чат,')
+                              '.погода, .перевод, .вики, .чат, .covid19')
 
                 if event.object.text.lower() == '.чат':
                     if event.obj.from_id == 379076419:
