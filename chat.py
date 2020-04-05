@@ -4,6 +4,7 @@ from vk_api.utils import get_random_id
 import wikipedia
 import googletrans
 import os
+import COVID19Py
 import requests
 
 wikipedia.set_lang("RU")
@@ -29,10 +30,46 @@ def per(peer_id, message):
     write_msg(peer_id, googletrans.Translator().translate(message, dest='ru').text)
 
 
+def covid(peer_id, message):
+    covid19 = COVID19Py.COVID19()
+    country = message.lower()
+    if country == 'сша' or country == 'америка':
+        loc = covid19.getLocationByCountryCode('US')[0]
+        b = [loc['country'], loc['country_population'], [loc['latest'][key] for key in loc['latest']]]
+        country = f'страна {b[0]}, с населением {b[1]} человек\nзаражено - {b[2][0]}\nумерло - {b[2][1]}'
+        write_msg(peer_id, country)
+    if country == 'италия':
+        loc = covid19.getLocationByCountryCode('IT')[0]
+        b = [loc['country'], loc['country_population'], [loc['latest'][key] for key in loc['latest']]]
+        country = f'страна {b[0]}, с населением {b[1]} человек\nзаражено - {b[2][0]}\nумерло - {b[2][1]}'
+        write_msg(peer_id, country)
+    if country == 'китай':
+        loc = covid19.getLocationByCountryCode('CN')[0]
+        b = [loc['country'], loc['country_population'], [loc['latest'][key] for key in loc['latest']]]
+        country = f'страна {b[0]}, с населением {b[1]} человек\nзаражено - {b[2][0]}\nумерло - {b[2][1]}'
+        write_msg(peer_id, country)
+    if country == 'россия':
+        loc = covid19.getLocationByCountryCode('RU')[0]
+        b = [loc['country'], loc['country_population'], [loc['latest'][key] for key in loc['latest']]]
+        country = f'страна {b[0]}, с населением {b[1]} человек\nзаражено - {b[2][0]}\nумерло - {b[2][1]}'
+        write_msg(peer_id, country)
+    else:
+        loc = covid19.getLatest()
+        b = [loc[key] for key in loc]
+        country = f'В мире\nзаражено - {b[0]}\nумерло - {b[1]}'
+        write_msg(peer_id, country)
+
+
 while True:
     try:
         for event in longpoll.listen():
             if event.type == VkBotEventType.MESSAGE_NEW and event.object.peer_id != event.object.from_id:
+
+                if event.obj.text == '.covid19':
+                    write_msg(event.obj.peer_id, 'Вам доступны США, Италия, Китай, Россия')
+                    write_msg(event.obj.peer_id, 'Введите страну:')
+                    for event in longpoll.listen():
+                        covid(event.obj.peer_id, event.obj.text)
 
                 if event.obj.text == '.перевод':
                     write_msg(event.obj.peer_id, 'Введите текст)')
