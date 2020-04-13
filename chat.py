@@ -30,29 +30,26 @@ def per(peer_id, message):
     write_msg(peer_id, googletrans.Translator().translate(message, dest='ru').text)
 
 
+dict = {'россия': 'RU', 'италия': 'IT', 'сша': 'US', 'казахстан': 'KZ', 'китай': 'CH'}
+
+
 def covid(peer_id, message):
     covid19 = COVID19Py.COVID19()
     country = message.lower()
-    if country == 'сша' or country == 'америка':
-        loc = covid19.getLocationByCountryCode('US')[0]
-        b = [loc['country'], loc['country_population'], [loc['latest'][key] for key in loc['latest']]]
-        country = f'страна {b[0]}, с населением {b[1]} человек\nзаражено - {b[2][0]}\nумерло - {b[2][1]}'
-        write_msg(peer_id, country)
-    elif country == 'италия':
-        loc = covid19.getLocationByCountryCode('IT')[0]
-        b = [loc['country'], loc['country_population'], [loc['latest'][key] for key in loc['latest']]]
-        country = f'страна {b[0]}, с населением {b[1]} человек\nзаражено - {b[2][0]}\nумерло - {b[2][1]}'
-        write_msg(peer_id, country)
-    elif country == 'россия':
-        loc = covid19.getLocationByCountryCode('RU')[0]
-        b = [loc['country'], loc['country_population'], [loc['latest'][key] for key in loc['latest']]]
-        country = f'страна {b[0]}, с населением {b[1]} человек\nзаражено - {b[2][0]}\nумерло - {b[2][1]}'
-        write_msg(peer_id, country)
-    else:
-        loc = covid19.getLatest()
-        b = [loc[key] for key in loc]
-        country = f'В мире\nзаражено - {b[0]}\nумерло - {b[1]}'
-        write_msg(peer_id, country)
+    try:
+        if country in dict:
+            loc = covid19.getLocationByCountryCode(dict[country])[0]
+            b = [loc['country'], loc['country_population'], [loc['latest'][key] for key in loc['latest']]]
+            country = f'страна {b[0]}, с населением {b[1]} человек\nзаражено - {b[2][0]}\nумерло - {b[2][1]}'
+            write_msg(peer_id, country)
+        else:
+            write_msg(peer_id, "Ошибка в названии страны/или ее нет в списке-3-")
+            loc = covid19.getLatest()
+            b = [loc[key] for key in loc]
+            country = f'В мире\nзаражено - {b[0]}\nумерло - {b[1]}'
+            write_msg(peer_id, country)
+    except:
+        write_msg(peer_id, "Информация по стране не найдена")
 
 
 while True:
