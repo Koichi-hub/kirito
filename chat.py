@@ -66,7 +66,7 @@ while True:
             if event.type == VkBotEventType.MESSAGE_NEW and event.object.peer_id != event.object.from_id:
                 
                 if event.obj.text.lower() == 'хокаге':
-                    person = vk.method('users.get', {'user_ids': id})[0]
+                    person = vk.method('users.get', {'user_ids': event.obj.from_id})[0]
                     write_msg(event.obj.peer_id, f'Привет {person['first_name']}')
 
                 if event.obj.text == '.covid19':
